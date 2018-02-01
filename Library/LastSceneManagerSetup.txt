@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes & Maps/protomap.unity
+- path: Assets/Scenes & Maps/uimap.unity
   isLoaded: 1
   isActive: 1
