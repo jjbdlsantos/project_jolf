@@ -11,6 +11,7 @@ public class MouseTracking : MonoBehaviour {
     private float radius = 0.6f;
     private Vector3 _centre;
     private float _angle;
+    private float lockZRotation = 0;
 
     public float angle;
 
@@ -34,5 +35,7 @@ public class MouseTracking : MonoBehaviour {
 
         var offset = new Vector3(Mathf.Sin(_angle), Mathf.Cos(_angle), 0) * radius;
         transform.localPosition = _centre + offset;
+        
+        
     }
 }

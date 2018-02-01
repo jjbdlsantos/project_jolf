@@ -38,10 +38,15 @@ public class BallMovement : MonoBehaviour {
     {
         Rigidbody rigid;
         var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-
+        Vector3 currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         rigid = bullet.GetComponent<Rigidbody>();
-        rigid.AddForce(bulletSpeed, 0, 0);
+        rigid.AddForce(currentMousePos * 100);
         
+    }
+
+    private void aimQuadrant()
+    {
+
     }
 
 
