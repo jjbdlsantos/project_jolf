@@ -7,8 +7,8 @@ public class GunPhysics : MonoBehaviour {
     private GameObject gun;
 
 	// Update is called once per frame
-	void Update () {
-
+	void FixedUpdate()
+    {
         var player = GameObject.Find("Player");
         Vector3 mousePos;
 
@@ -20,13 +20,16 @@ public class GunPhysics : MonoBehaviour {
         }
 
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+        Debug.Log("Current Mouse Position: " + mousePos);
 
         AngleCalculations(player.transform.position, mousePos);
     }
 
+
+
     private void AngleCalculations(Vector3 origin, Vector3 mouse)
     {
-        Vector3 gunPos = new Vector3(0,0,0);
+        Vector3 gunPos = new Vector3(0, 0, 0);
         float radius = 1f;
         float angle;
 

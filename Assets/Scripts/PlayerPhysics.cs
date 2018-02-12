@@ -6,14 +6,13 @@ public class PlayerPhysics : MonoBehaviour {
 
     public float multiplier = 100f;
     private LineRenderer mouseLine;
+    private Vector3 mousePos;
+    private Vector3 startPos = new Vector3(0, 0, 0);
+    private Vector3 endPos = new Vector3(0, 0, 0);
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 mousePos;
-        Vector3 startPos = new Vector3 (0,0,0);
-        Vector3 endPos = new Vector3(0, 0, 0);
-
         if (Input.GetMouseButtonDown(0))
         {
             if (mouseLine == null)
@@ -41,6 +40,7 @@ public class PlayerPhysics : MonoBehaviour {
 
             mouseLine.SetPosition(1, mousePos);
 
+            Debug.Log("Start: " + startPos + " End: " + endPos);
             ScalarCalculation(startPos, endPos);
             Destroy(mouseLine);
         }
@@ -71,11 +71,14 @@ public class PlayerPhysics : MonoBehaviour {
 
     private void ScalarCalculation(Vector3 start, Vector3 end)
     {
+        //calculating total force 
         float xDiff = Mathf.Abs(start.x - end.x);
         float yDiff = Mathf.Abs(start.y - end.y);
 
         float xSign = (start.x - end.x) / xDiff;
-        float ySign = (start .y - end.y) / yDiff;
+        float ySign = (start.y - end.y) / yDiff;
+
+        Debug.Log("xSign: " + xSign + " ySign: " + ySign);
 
         ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
     }
