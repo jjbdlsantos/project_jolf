@@ -40,7 +40,7 @@ public class PlayerPhysics : MonoBehaviour {
 
             mouseLine.SetPosition(1, mousePos);
 
-            Debug.Log("Start: " + startPos + " End: " + endPos);
+            //Debug.Log("Start: " + startPos + " End: " + endPos);
             ScalarCalculation(startPos, endPos);
             Destroy(mouseLine);
         }
@@ -78,7 +78,7 @@ public class PlayerPhysics : MonoBehaviour {
         float xSign = (start.x - end.x) / xDiff;
         float ySign = (start.y - end.y) / yDiff;
 
-        Debug.Log("xSign: " + xSign + " ySign: " + ySign);
+        //Debug.Log("xSign: " + xSign + " ySign: " + ySign);
 
         ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
     }
