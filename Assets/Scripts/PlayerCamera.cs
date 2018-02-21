@@ -12,7 +12,7 @@ public class PlayerCamera : MonoBehaviour {
 	void Start () {
         player = GameObject.Find("Player");
         target = player.transform;
-        aCam = GameObject.Find("Main Camera (1)");
+        aCam = GameObject.Find("Player Camera");
 	}
 	
 	// Update is called once per frame
