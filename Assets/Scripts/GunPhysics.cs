@@ -5,12 +5,13 @@ using UnityEngine;
 public class GunPhysics : MonoBehaviour {
 
     private GameObject gun;
-
+    private GameObject camera;
 
     private void Start()
     {
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        camera = GameObject.Find("Main Camera");
 
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.05f;
@@ -23,6 +24,8 @@ public class GunPhysics : MonoBehaviour {
         var player = GameObject.Find("Player");
         Vector3 mousePos;
 
+
+
         if (gun == null)
         {
             // Create gun
@@ -31,7 +34,7 @@ public class GunPhysics : MonoBehaviour {
             Physics.IgnoreCollision(gun.GetComponent<Collider>(), player.GetComponent<Collider>());
         }
 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 10f));
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, camera.transform.position.z));
         Debug.Log("Current Mouse Position: " + mousePos);
 
         AngleCalculations(player.transform.position, mousePos);
