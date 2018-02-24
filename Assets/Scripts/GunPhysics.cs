@@ -5,17 +5,20 @@ using UnityEngine;
 public class GunPhysics : MonoBehaviour {
 
     private GameObject gun;
-    private GameObject camera;
+    private GameObject worldCam;
+    private GameObject playerController;
+    private PlayerProperties properties;
 
     private void Start()
     {
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        camera = GameObject.Find("Main Camera");
-
+        worldCam = GameObject.Find("Main Camera");
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
+
+        properties = GameObject.Find("Player Controller").GetComponent<PlayerProperties>();
     }
 
     // Update is called once per frame
@@ -23,8 +26,6 @@ public class GunPhysics : MonoBehaviour {
     {
         var player = GameObject.Find("Player");
         Vector3 mousePos;
-
-
 
         if (gun == null)
         {
@@ -34,20 +35,23 @@ public class GunPhysics : MonoBehaviour {
             Physics.IgnoreCollision(gun.GetComponent<Collider>(), player.GetComponent<Collider>());
         }
 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, camera.transform.position.z));
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, worldCam.transform.position.z));
         Debug.Log("Current Mouse Position: " + mousePos);
 
         AngleCalculations(player.transform.position, mousePos);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FireProjectile();
-        }
-
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.SetPosition(0, gun.transform.position);
         lineRenderer.SetPosition(1, mousePos);
-        
+
+
+        if (properties.isMoving)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                FireProjectile();
+            }
+        }
     }
 
     Vector3 gunPos = new Vector3(0, 0, 0);

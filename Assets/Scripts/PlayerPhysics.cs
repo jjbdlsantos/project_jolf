@@ -9,41 +9,52 @@ public class PlayerPhysics : MonoBehaviour {
     private Vector3 mousePos;
     private Vector3 startPos = new Vector3(0, 0, 0);
     private Vector3 endPos = new Vector3(0, 0, 0);
+    private PlayerProperties properties;
+
+    private void Start()
+    {
+        properties = GameObject.Find("Player Controller").GetComponent<PlayerProperties>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        properties.isMoving = isPlayerMoving();
+        if (!properties.isMoving)
         {
-            if (mouseLine == null)
+            if (Input.GetMouseButtonDown(0))
             {
-                CreateLine();
+                if (mouseLine == null)
+                {
+                    CreateLine();
+                }
+
+                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                startPos = mousePos;
+
+                mouseLine.SetPosition(0, mousePos);
+                mouseLine.SetPosition(1, mousePos);
             }
 
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
-            startPos = mousePos;
+            else if (Input.GetMouseButton(0) && mouseLine)
+            {
+                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                mouseLine.SetPosition(1, mousePos);
+            }
 
-            mouseLine.SetPosition(0, mousePos);
-            mouseLine.SetPosition(1, mousePos);
+            else if (Input.GetMouseButtonUp(0) && mouseLine)
+            {
+                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                endPos = mousePos;
+
+                mouseLine.SetPosition(1, mousePos);
+
+                //Debug.Log("Start: " + startPos + " End: " + endPos);
+                ScalarCalculation(startPos, endPos);
+                Destroy(mouseLine);
+            }
         }
 
-        else if (Input.GetMouseButton(0) && mouseLine)
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
-            mouseLine.SetPosition(1, mousePos);
-        }
-
-        else if (Input.GetMouseButtonUp(0) && mouseLine)
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
-            endPos = mousePos;
-
-            mouseLine.SetPosition(1, mousePos);
-
-            //Debug.Log("Start: " + startPos + " End: " + endPos);
-            ScalarCalculation(startPos, endPos);
-            Destroy(mouseLine);
-        }
     }
 
     private void CreateLine()
@@ -81,5 +92,19 @@ public class PlayerPhysics : MonoBehaviour {
         //Debug.Log("xSign: " + xSign + " ySign: " + ySign);
 
         ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
+    }
+
+    private bool isPlayerMoving()
+    {
+        Rigidbody rb = GameObject.Find("Player").GetComponent<Rigidbody>();
+        float speed = rb.velocity.magnitude;
+        if(speed < 0.3)
+        {
+            rb.velocity = new Vector3(0, 0, 0);
+            Debug.Log("PLAYER IS NOT MOVING");
+            return false;
+        }
+        Debug.Log("PLAYER IS MOVING");
+        return true;
     }
 }
