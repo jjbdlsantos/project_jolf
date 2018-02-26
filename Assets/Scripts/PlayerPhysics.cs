@@ -101,10 +101,10 @@ public class PlayerPhysics : MonoBehaviour {
         if(speed < 0.3)
         {
             rb.velocity = new Vector3(0, 0, 0);
-            Debug.Log("PLAYER IS NOT MOVING");
+            //Debug.Log("PLAYER IS NOT MOVING");
             return false;
         }
-        Debug.Log("PLAYER IS MOVING");
+        //Debug.Log("PLAYER IS MOVING");
         return true;
     }
 }

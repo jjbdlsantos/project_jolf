@@ -36,7 +36,7 @@ public class GunPhysics : MonoBehaviour {
         }
 
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, worldCam.transform.position.z));
-        Debug.Log("Current Mouse Position: " + mousePos);
+        //Debug.Log("Current Mouse Position: " + mousePos);
 
         AngleCalculations(player.transform.position, mousePos);
 
@@ -68,8 +68,8 @@ public class GunPhysics : MonoBehaviour {
         gunPos.y = radius * Mathf.Sin(angle);
         
         gun.transform.position = origin + gunPos;
-        Debug.Log("Angle: " + angle);
-        Debug.Log("Origin: " + origin + " GunPos: " + gunPos + " Added: " + gun.transform.position);
+        //Debug.Log("Angle: " + angle);
+        //Debug.Log("Origin: " + origin + " GunPos: " + gunPos + " Added: " + gun.transform.position);
     }
     
     public GameObject bulletPrefab;

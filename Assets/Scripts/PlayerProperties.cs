@@ -5,6 +5,16 @@ using UnityEngine;
 public class PlayerProperties : MonoBehaviour {
 
     private bool _moving = false;
+    private GameObject[] players;
+    private GameObject playerCamera;
+    private GameObject player;
+
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
 
     public string displayName
     {
@@ -47,14 +57,4 @@ public class PlayerProperties : MonoBehaviour {
         get;
         set;
     }
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
