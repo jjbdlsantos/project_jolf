@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerProperties : MonoBehaviour {
 
     private bool _moving = false;
+    private string _playedID;
     private GameObject[] players;
     private GameObject playerCamera;
     private GameObject player;
@@ -15,6 +16,17 @@ public class PlayerProperties : MonoBehaviour {
 
     }
 
+    public string playerID
+    {
+        get
+        {
+            return _playedID;
+        }
+        set
+        {
+            _playedID = value;
+        }
+    }
 
     public string displayName
     {

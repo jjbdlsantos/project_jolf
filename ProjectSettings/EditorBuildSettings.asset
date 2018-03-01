@@ -5,8 +5,8 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+  - enabled: 0
+    path: 
     guid: 19ef04a6e93c463449cb4f0b3a31c730
   - enabled: 1
     path: Assets/Scenes/SandBokChoi.unity

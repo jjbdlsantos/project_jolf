@@ -1,33 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MultiplayerController : MonoBehaviour {
 
-    public int totalPlayers = 2;
+    public static int totalPlayers = 2;
     public GameObject playerPrefab;
-    private Transform aTransform;
-    private int spawnPosition = 37;
 
 	// Use this for initialization
 	void Start () {
-        Debug.Log("Starting game...");
         for (int i = 1; i <= totalPlayers; i++)
         {
+            string playerID = "Player" + i;
             GameObject player = Instantiate(playerPrefab);
-            player.name = "PlayerGroup" + i;
+            player.name = playerID;
 
-            GameObject playerObject = GameObject.Find("Player");
-            playerObject.name = "Player" + i;
-            playerObject.transform.localPosition = new Vector3(spawnPosition, 4, 20);
+            PlayerProperties properties = player.GetComponent<PlayerProperties>();
+            properties.playerID = playerID;
+            properties.playerNumber = i;
 
-            GameObject playerCamObject = GameObject.Find("Player Camera");
-            playerCamObject.name = "Player" + i + "Cam";
+            GameObject playerBody = GameObject.Find("Player");
+            playerBody.name = playerID + "Body";
 
-            GameObject playerControllerObject = GameObject.Find("Player Controller");
-            playerControllerObject.name = "Player" + i + "Controller";
-
-            spawnPosition += 3;
+            GameObject playerCam = GameObject.Find("Player Camera");
+            playerCam.name = playerID + "Cam";
         }
 	}
 	

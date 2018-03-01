@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerCam1
+  - PlayerCam2
+  - PlayerCam3
+  - PlayerCam4
   layers:
   - Default
   - TransparentFX

@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour {
 
-    Transform target;
-    GameObject player;
-    GameObject aCam;
+    private Transform target;
+    private GameObject player;
+    private GameObject aCam;
+    private PlayerProperties properties;
+    private string playerID;
 
 	// Use this for initialization
 	void Start () {
-        player = GameObject.Find("Player");
+        properties = this.gameObject.transform.parent.gameObject.GetComponent<PlayerProperties>();
+        playerID = properties.playerID;
+        player = GameObject.Find(playerID + "Body");
         target = player.transform;
-        aCam = GameObject.Find("Player Camera");
+        aCam = GameObject.Find(playerID + "Cam");
+
+        Camera camComponent = aCam.GetComponent<Camera>();
+        camComponent.targetDisplay = properties.playerNumber;
+        
 	}
 	
 	// Update is called once per frame

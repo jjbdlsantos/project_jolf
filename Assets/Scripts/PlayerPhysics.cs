@@ -10,16 +10,25 @@ public class PlayerPhysics : MonoBehaviour {
     private Vector3 startPos = new Vector3(0, 0, 0);
     private Vector3 endPos = new Vector3(0, 0, 0);
     private PlayerProperties properties;
+    private string playerID;
+    private Camera aCam;
 
     private void Start()
     {
-        properties = GameObject.Find("Player Controller").GetComponent<PlayerProperties>();
+        properties = this.gameObject.GetComponent<PlayerProperties>();
+        playerID = properties.playerID;
+
+        aCam = GameObject.Find(playerID + "Cam").GetComponent<Camera>();
+    }
+    
+    private void initVar()
+    {
     }
 
     // Update is called once per frame
     void Update()
     {
-        properties.isMoving = isPlayerMoving();
+        properties.isMoving = IsPlayerMoving();
         if (!properties.isMoving)
         {
             if (Input.GetMouseButtonDown(0))
@@ -29,7 +38,7 @@ public class PlayerPhysics : MonoBehaviour {
                     CreateLine();
                 }
 
-                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                mousePos = aCam.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
                 startPos = mousePos;
 
                 mouseLine.SetPosition(0, mousePos);
@@ -38,13 +47,13 @@ public class PlayerPhysics : MonoBehaviour {
 
             else if (Input.GetMouseButton(0) && mouseLine)
             {
-                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                mousePos = aCam.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
                 mouseLine.SetPosition(1, mousePos);
             }
 
             else if (Input.GetMouseButtonUp(0) && mouseLine)
             {
-                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
+                mousePos = aCam.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, 5f));
                 endPos = mousePos;
 
                 mouseLine.SetPosition(1, mousePos);
@@ -74,7 +83,7 @@ public class PlayerPhysics : MonoBehaviour {
     private void ApplyForce(float xForce, float yForce)
     {
         Rigidbody rb;
-        var player = GameObject.Find("Player");
+        var player = GameObject.Find(playerID + "Body");
         rb = player.GetComponent<Rigidbody>();
         Debug.Log("xForce: " + xForce + " zForce: " + yForce);
         rb.AddForce(xForce, yForce, 0, ForceMode.Force);
@@ -94,17 +103,15 @@ public class PlayerPhysics : MonoBehaviour {
         ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
     }
 
-    private bool isPlayerMoving()
+    private bool IsPlayerMoving()
     {
-        Rigidbody rb = GameObject.Find("Player").GetComponent<Rigidbody>();
+        Rigidbody rb = GameObject.Find(playerID + "Body").GetComponent<Rigidbody>();
         float speed = rb.velocity.magnitude;
         if(speed < 0.3)
         {
             rb.velocity = new Vector3(0, 0, 0);
-            //Debug.Log("PLAYER IS NOT MOVING");
             return false;
         }
-        //Debug.Log("PLAYER IS MOVING");
         return true;
     }
 }

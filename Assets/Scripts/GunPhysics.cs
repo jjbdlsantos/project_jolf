@@ -1,30 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunPhysics : MonoBehaviour {
 
     private GameObject gun;
-    private GameObject worldCam;
+    private GameObject playerCam;
     private GameObject playerController;
     private PlayerProperties properties;
+    private string playerID;
+    private int bullets = 0;
+
 
     private void Start()
     {
+        GameObject parent = this.gameObject.transform.parent.gameObject;
+        properties = parent.GetComponent<PlayerProperties>();
+        playerID = properties.playerID;
+
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
-        worldCam = GameObject.Find("Main Camera");
+        playerCam = GameObject.Find(playerID + "Cam");
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
 
-        properties = GameObject.Find("Player Controller").GetComponent<PlayerProperties>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        var player = GameObject.Find("Player");
+        var player = GameObject.Find(playerID + "Body");
         Vector3 mousePos;
 
         if (gun == null)
@@ -35,8 +43,7 @@ public class GunPhysics : MonoBehaviour {
             Physics.IgnoreCollision(gun.GetComponent<Collider>(), player.GetComponent<Collider>());
         }
 
-        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, worldCam.transform.position.z));
-        //Debug.Log("Current Mouse Position: " + mousePos);
+        mousePos = playerCam.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, playerCam.transform.position.z));
 
         AngleCalculations(player.transform.position, mousePos);
 
@@ -50,6 +57,10 @@ public class GunPhysics : MonoBehaviour {
             if (Input.GetMouseButtonDown(0))
             {
                 FireProjectile();
+                GameObject canvas = GameObject.Find(playerID + "Canvas");
+                GameObject text = canvas.transform.GetChild(1).gameObject;
+                Text moreText = text.GetComponent<Text>();
+                moreText.text = "" + bullets++;
             }
         }
     }
