@@ -25,6 +25,9 @@ public class MultiplayerController : MonoBehaviour {
 
             GameObject playerCam = GameObject.Find("Player Camera");
             playerCam.name = playerID + "Cam";
+
+            GameObject canvas = GameObject.Find("Canvas");
+            canvas.name = playerID + "Canvas";
         }
 	}
 	
