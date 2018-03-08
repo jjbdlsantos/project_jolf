@@ -129,12 +129,11 @@ public class PlayerPhysics : MonoBehaviour {
 
     private bool isSunk()
     {
-        GameObject p = GameObject.Find(playerID + "Body");
+        GameObject player = GameObject.Find(playerID + "Body");
         RaycastHit hitInfo;
-        if (Physics.Raycast(p.transform.position, new Vector3(0, 0, -180), out hitInfo, 1))
+        if (Physics.Raycast(player.transform.position, new Vector3(0, 0, -180), out hitInfo, 1))
         {
             string RayTile = hitInfo.transform.gameObject.name;
-            print(RayTile);
             if (RayTile == "Hole")
             {
                 print("You win");
