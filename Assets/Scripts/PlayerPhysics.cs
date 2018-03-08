@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerPhysics : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class PlayerPhysics : MonoBehaviour {
     private PlayerProperties properties;
     private string playerID;
     private Camera aCam;
-    private bool hasShot = false;
+    private bool isShot = false;
 
     private void Start()
     {
@@ -25,7 +26,7 @@ public class PlayerPhysics : MonoBehaviour {
     void Update()
     {
         properties.isMoving = IsPlayerMoving();
-        if (!properties.isMoving && properties.isTurn && !hasShot)
+        if (!properties.isMoving && properties.isTurn && !isShot)
         {
             aCam.enabled = true;
             if (Input.GetMouseButtonDown(0))
@@ -56,16 +57,20 @@ public class PlayerPhysics : MonoBehaviour {
                 mouseLine.SetPosition(1, mousePos);
                 Destroy(mouseLine);
 
-                hasShot = ScalarCalculation(startPos, endPos);
+                isShot = ScalarCalculation(startPos, endPos);
             }
         }
-        else if (properties.isTurn && hasShot)
+        else if (properties.isTurn && isShot)
         {
             if (!IsPlayerMoving())
             {
                 properties.isTurn = false;
-                hasShot = false;
+                isShot = false;
                 aCam.enabled = false;
+            }
+            else
+            {
+                isSunk();
             }
         }
 
@@ -91,7 +96,7 @@ public class PlayerPhysics : MonoBehaviour {
         var player = GameObject.Find(playerID + "Body");
         rb = player.GetComponent<Rigidbody>();
         Debug.Log("xForce: " + xForce + " zForce: " + yForce);
-        if (!float.IsNaN(xForce) || !float.IsNaN(yForce))
+        if (!float.IsNaN(xForce) && !float.IsNaN(yForce))
         {
             rb.AddForce(xForce, yForce, 0, ForceMode.Force);
             return true;
@@ -120,5 +125,22 @@ public class PlayerPhysics : MonoBehaviour {
             return false;
         }
         return true;
+    }
+
+    private bool isSunk()
+    {
+        GameObject p = GameObject.Find(playerID + "Body");
+        RaycastHit hitInfo;
+        if (Physics.Raycast(p.transform.position, new Vector3(0, 0, -180), out hitInfo, 1))
+        {
+            string RayTile = hitInfo.transform.gameObject.name;
+            print(RayTile);
+            if (RayTile == "Hole")
+            {
+                print("You win");
+                return true;
+            }
+        }
+        return false;
     }
 }
