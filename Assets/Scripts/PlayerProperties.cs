@@ -5,12 +5,14 @@ using UnityEngine;
 public class PlayerProperties : MonoBehaviour {
 
     private bool _moving = false;
+    private bool _turn = false;
     private string _playedID;
     private GameObject[] players;
     private GameObject playerCamera;
     private GameObject player;
+    private Vector3 _lastPos;
 
-    // Use this for initialization
+
     void Start()
     {
 
@@ -54,8 +56,14 @@ public class PlayerProperties : MonoBehaviour {
 
     public bool isTurn
     {
-        get;
-        set;
+        get
+        {
+            return _turn;
+        }
+        set
+        {
+            _turn = value;
+        }
     }
 
     public int strokes
@@ -65,6 +73,12 @@ public class PlayerProperties : MonoBehaviour {
     }
 
     public int score
+    {
+        get;
+        set;
+    }
+
+    public Vector3 lastPos
     {
         get;
         set;

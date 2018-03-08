@@ -12,6 +12,7 @@ public class PlayerPhysics : MonoBehaviour {
     private PlayerProperties properties;
     private string playerID;
     private Camera aCam;
+    private bool hasShot = false;
 
     private void Start()
     {
@@ -20,17 +21,13 @@ public class PlayerPhysics : MonoBehaviour {
 
         aCam = GameObject.Find(playerID + "Cam").GetComponent<Camera>();
     }
-    
-    private void initVar()
-    {
-    }
 
-    // Update is called once per frame
     void Update()
     {
         properties.isMoving = IsPlayerMoving();
-        if (!properties.isMoving)
+        if (!properties.isMoving && properties.isTurn && !hasShot)
         {
+            aCam.enabled = true;
             if (Input.GetMouseButtonDown(0))
             {
                 if (mouseLine == null)
@@ -57,10 +54,18 @@ public class PlayerPhysics : MonoBehaviour {
                 endPos = mousePos;
 
                 mouseLine.SetPosition(1, mousePos);
-
-                //Debug.Log("Start: " + startPos + " End: " + endPos);
-                ScalarCalculation(startPos, endPos);
                 Destroy(mouseLine);
+
+                hasShot = ScalarCalculation(startPos, endPos);
+            }
+        }
+        else if (properties.isTurn && hasShot)
+        {
+            if (!IsPlayerMoving())
+            {
+                properties.isTurn = false;
+                hasShot = false;
+                aCam.enabled = false;
             }
         }
 
@@ -80,27 +85,29 @@ public class PlayerPhysics : MonoBehaviour {
         mouseLine.useWorldSpace = true;
     }
 
-    private void ApplyForce(float xForce, float yForce)
+    private bool ApplyForce(float xForce, float yForce)
     {
         Rigidbody rb;
         var player = GameObject.Find(playerID + "Body");
         rb = player.GetComponent<Rigidbody>();
         Debug.Log("xForce: " + xForce + " zForce: " + yForce);
-        rb.AddForce(xForce, yForce, 0, ForceMode.Force);
+        if (!float.IsNaN(xForce) || !float.IsNaN(yForce))
+        {
+            rb.AddForce(xForce, yForce, 0, ForceMode.Force);
+            return true;
+        }
+        return false;
     }
 
-    private void ScalarCalculation(Vector3 start, Vector3 end)
+    private bool ScalarCalculation(Vector3 start, Vector3 end)
     {
-        //calculating total force 
         float xDiff = Mathf.Abs(start.x - end.x);
         float yDiff = Mathf.Abs(start.y - end.y);
 
         float xSign = (start.x - end.x) / xDiff;
         float ySign = (start.y - end.y) / yDiff;
 
-        //Debug.Log("xSign: " + xSign + " ySign: " + ySign);
-
-        ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
+        return ApplyForce((xSign * xDiff * multiplier), (ySign * yDiff * multiplier));
     }
 
     private bool IsPlayerMoving()

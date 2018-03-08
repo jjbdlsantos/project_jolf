@@ -12,7 +12,6 @@ public class GunPhysics : MonoBehaviour {
     private string playerID;
     private int bullets = 0;
 
-
     private void Start()
     {
         GameObject parent = this.gameObject.transform.parent.gameObject;
@@ -25,42 +24,43 @@ public class GunPhysics : MonoBehaviour {
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.05f;
         lineRenderer.endWidth = 0.05f;
-
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-        var player = GameObject.Find(playerID + "Body");
-        Vector3 mousePos;
+        if (properties.isTurn)
+        { 
+            var player = GameObject.Find(playerID + "Body");
+            Vector3 mousePos;
 
-        if (gun == null)
-        {
-            // Create gun
-            gun = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            gun.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            Physics.IgnoreCollision(gun.GetComponent<Collider>(), player.GetComponent<Collider>());
-        }
-
-        mousePos = playerCam.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, playerCam.transform.position.z));
-
-        AngleCalculations(player.transform.position, mousePos);
-
-        LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.SetPosition(0, gun.transform.position);
-        lineRenderer.SetPosition(1, mousePos);
-
-
-        if (properties.isMoving)
-        {
-            if (Input.GetMouseButtonDown(0))
+            if (gun == null)
             {
-                FireProjectile();
-                GameObject canvas = GameObject.Find(playerID + "Canvas");
-                GameObject text = canvas.transform.GetChild(1).gameObject;
-                Text moreText = text.GetComponent<Text>();
-                moreText.text = "" + bullets++;
+                gun = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                gun.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                Physics.IgnoreCollision(gun.GetComponent<Collider>(), player.GetComponent<Collider>());
+            }
+
+            mousePos = playerCam.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition + new Vector3(0, 0, playerCam.transform.position.z));
+
+            AngleCalculations(player.transform.position, mousePos);
+
+            LineRenderer lineRenderer = GetComponent<LineRenderer>();
+            lineRenderer.enabled = properties.isTurn;
+            lineRenderer.SetPosition(0, gun.transform.position);
+            lineRenderer.SetPosition(1, mousePos);
+        
+
+
+            if (properties.isMoving)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    FireProjectile();
+                    GameObject canvas = GameObject.Find(playerID + "Canvas");
+                    GameObject text = canvas.transform.GetChild(1).gameObject;
+                    Text moreText = text.GetComponent<Text>();
+                    moreText.text = "" + bullets++;
+                }
             }
         }
     }
@@ -79,8 +79,6 @@ public class GunPhysics : MonoBehaviour {
         gunPos.y = radius * Mathf.Sin(angle);
         
         gun.transform.position = origin + gunPos;
-        //Debug.Log("Angle: " + angle);
-        //Debug.Log("Origin: " + origin + " GunPos: " + gunPos + " Added: " + gun.transform.position);
     }
     
     public GameObject bulletPrefab;
