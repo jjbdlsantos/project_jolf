@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GunManager : MonoBehaviour{
-
 	private GameObject gun;
 	private static GameObject ball;
 	private static Camera ballCam;
@@ -34,20 +33,17 @@ public class GunManager : MonoBehaviour{
 	}
 
 	public void Update() {
-		Vector3 mousePos;
-
-		mousePos = ballCam.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, ballCam.transform.position.y, 0));
+		Vector3 mousePos = ballCam.ScreenToWorldPoint(Input.mousePosition + new Vector3(0, ballCam.transform.position.y, 0));
 		AngleCalculations(ball.transform.position, mousePos);
 	}
 
     private void AngleCalculations(Vector3 origin, Vector3 mouse) {
-        float angle;
         float radius = 1f;   
 
         float xDiff = mouse.x - origin.x;
         float zDiff = mouse.z - origin.z;
 
-        angle = Mathf.Atan2(zDiff, xDiff);
+        float angle = Mathf.Atan2(zDiff, xDiff);
 
         gunPos.x = radius * Mathf.Cos(angle);
         gunPos.z = radius * Mathf.Sin(angle);
@@ -56,12 +52,13 @@ public class GunManager : MonoBehaviour{
 	}
 
     public void FireProjectile() {
-        Rigidbody rigid;
 		float bulletSpeed = 2000;
         var bullet = Instantiate(gunGO, gun.transform.position, gun.transform.rotation);
+
+		Physics.IgnoreCollision(gun.GetComponent<Collider>(), bullet.GetComponent<Collider>());
 		bullet.transform.localScale = new Vector3(15f, 15f, 15f);
-        rigid = bullet.GetComponent<Rigidbody>();
-        Physics.IgnoreCollision(gun.GetComponent<Collider>(), bullet.GetComponent<Collider>());
-        rigid.AddForce(bulletSpeed * gunPos.x, 0,  bulletSpeed * gunPos.z);
+
+		Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        rb.AddForce(bulletSpeed * gunPos.x, 0,  bulletSpeed * gunPos.z);
     }
 }

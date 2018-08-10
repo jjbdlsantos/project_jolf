@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BallManager : MonoBehaviour {
-
 	public GameObject player;
 	public Vector3 ballPosition;
 	private GameObject playerGO;
@@ -56,8 +55,7 @@ public class BallManager : MonoBehaviour {
     }
 
 	private bool IsBallMoving() {
-		Rigidbody rb;
-		rb = ball.GetComponent<Rigidbody>();		
+		Rigidbody rb = ball.GetComponent<Rigidbody>();		
 		float speed = rb.velocity.magnitude;
 		if (speed < 0.3) {
 			rb.velocity = new Vector3(0, 0, 0);
@@ -140,8 +138,7 @@ public class BallManager : MonoBehaviour {
     	}
 
 		public void ApplyForce(GameObject ball, Vector3 force) {
-			Rigidbody rb;
-			rb = ball.GetComponent<Rigidbody>();
+			Rigidbody rb = ball.GetComponent<Rigidbody>();
 			if (!float.IsNaN(force.x) && !float.IsNaN(force.z)) {
 				rb.AddForce(force.x, force.y, force.z, ForceMode.Force);
 			}
