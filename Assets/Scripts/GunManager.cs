@@ -47,13 +47,13 @@ public class GunManager : MonoBehaviour{
 	}
 
     public void FireProjectile() {
-		float bulletSpeed = 2000;
+		float bulletVelocity = 2000;
         var bullet = Instantiate(gunGO, gun.transform.position, gun.transform.rotation);
 
 		Physics.IgnoreCollision(gun.GetComponent<Collider>(), bullet.GetComponent<Collider>());
 		bullet.transform.localScale = new Vector3(15f, 15f, 15f);
 
 		Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(bulletSpeed * gunPos.x, 0,  bulletSpeed * gunPos.z);
+        rb.AddForce(bulletVelocity * gunPos.x, 0,  bulletVelocity * gunPos.z);
     }
 }
