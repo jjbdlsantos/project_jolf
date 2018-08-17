@@ -7,7 +7,8 @@ public class GunManager : MonoBehaviour{
 	private static GameObject ball;
 	private static Camera ballCam;
 	private GameObject gunGO;
-	Vector3 gunPos = new Vector3(0,0,0);
+	private Vector3 gunPos = new Vector3(0,0,0);
+	private static float orbitRadius = 0.5f;
 
 	public static GunManager Constructor(GameObject player, Camera cam) {
 		GunManager gunMan = player.AddComponent<GunManager>();
@@ -24,12 +25,6 @@ public class GunManager : MonoBehaviour{
 		gun.transform.parent = ball.transform;
 
 		Physics.IgnoreCollision(gun.GetComponent<Collider>(), ball.GetComponent<Collider>());
-
-		// var map = GameObject.Find("Tutorial Map");
-		// var floor = map.transform.GetChild(1).gameObject;
-		// var hole = floor.transform.GetChild(0).gameObject;
-		// Physics.IgnoreCollision(gun.GetComponent<Collider>(), floor.GetComponent<Collider>());
-		// Physics.IgnoreCollision(gun.GetComponent<Collider>(), hole.GetComponent<Collider>());
 	}
 
 	public void Update() {
